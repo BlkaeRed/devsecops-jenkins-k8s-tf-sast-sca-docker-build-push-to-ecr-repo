@@ -39,8 +39,6 @@ pipeline {
 			  docker.withRegistry("https://${ECR_URL}", 'ecr:us-west-2:aws-credentials') {
                           app.push("latest") 
 			  }
-		   }
-                    
                     }
                 }
             }
