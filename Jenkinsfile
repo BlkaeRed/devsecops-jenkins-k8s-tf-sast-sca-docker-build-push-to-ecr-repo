@@ -3,10 +3,14 @@ pipeline {
   tools { 
         maven 'Maven_3_5_2'  
     }
+  environment {
+	SOLAR_TOKEN = credentials('SOLAR_TOKEN')
+	AWS_ECR_URL = credentials('AWS_ECR_URL')
+  }
    stages{
     stage('CompileandRunSonarAnalysis') {
             steps {	
-		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=asgbuggywebapp -Dsonar.organization=asgbuggywebapp -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=932558e169d66a8f1d1adf470b908a46156f5844'
+		sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=buggywebapps -Dsonar.organization=buggywebapps -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SOLAR_TOKEN'
 			}
     }
 
@@ -31,8 +35,12 @@ pipeline {
 	stage('Push') {
             steps {
                 script{
-                    docker.withRegistry('https://145988340565.dkr.ecr.us-west-2.amazonaws.com', 'ecr:us-west-2:aws-credentials') {
-                    app.push("latest")
+		   withCredentials([string(credentialsId: 'AWS_ECR_URL', variable: 'ECR_URL')]) {
+			  docker.withRegistry("https://${ECR_URL}", 'ecr:us-west-2:aws-credentials') {
+                          app.push("latest") 
+			  }
+		   }
+                    
                     }
                 }
             }
