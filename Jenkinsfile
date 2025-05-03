@@ -35,10 +35,9 @@ pipeline {
 	stage('Push') {
             steps {
                 script{
-		   withCredentials([string(credentialsId: 'AWS_ECR_URL', variable: 'ECR_URL')]) {
-			  docker.withRegistry('https://$ECR_URL', 'ecr:us-west-2:aws-credentials') {
-                          app.push("latest") 
-			  }
+		        docker.withRegistry('https://657954422063.dkr.ecr.us-west-2.amazonaws.com/asg', 'ecr:us-west-2:aws-credentials') {
+                        app.push("latest") 
+
                     }
                 }
             }
