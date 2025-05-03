@@ -4,7 +4,7 @@ pipeline {
         maven "Maven_3.2.5" 
     }
   environment {
-	SOLAR_TOKEN = credentials('SOLAR_TOKEN')
+	SONAR_TOKEN = credentials('SONAR_TOKEN')
 	AWS_ECR_URL = credentials('AWS_ECR_URL')
   }
    stages{
